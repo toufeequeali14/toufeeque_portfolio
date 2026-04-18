@@ -717,7 +717,11 @@ footer { background:var(--bg2); border-top:1px solid var(--line); padding:1.8rem
           <select id="fs"><option value="">Select…</option><option>Freelance Project</option><option>Full-time Role</option><option>Collaboration</option><option>Other</option></select>
         </div>
         <div class="field"><div class="field-label">Message</div><textarea rows="4" placeholder="Tell me about your project…" id="fm"></textarea></div>
+        <!-- <button class="submit-btn" onclick="send()">Send Message →</button> -->
+
+
         <button class="submit-btn" onclick="send()">Send Message →</button>
+
       </div>
     </div>
   </div>
@@ -772,5 +776,53 @@ function send() {
   setTimeout(() => { btn.textContent = 'Sent! Talk soon ✓'; btn.style.background = '#27ae60'; }, 900);
 }
 </script>
+
+        <script>
+        function send() {
+          // Get form values
+          const name = document.getElementById('fn').value;
+          const email = document.getElementById('fe').value;
+          const subject = document.getElementById('fs').value;
+          const message = document.getElementById('fm').value;
+
+          // Basic Validation
+          if (!name || !email || !message) {
+            alert("Please fill in all required fields.");
+            return;
+          }
+
+          // Prepare data for Formspree
+          const formData = {
+            name: name,
+            email: email,
+            subject: subject,
+            message: message
+          };
+
+          // Send the request
+          fetch("https://formspree.io/f/xaqajwld", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+          })
+          .then(response => {
+            if (response.ok) {
+              alert("Thanks for your message! I'll get back to you soon.");
+              // Clear form
+              document.getElementById('fn').value = "";
+              document.getElementById('fe').value = "";
+              document.getElementById('fm').value = "";
+            } else {
+              alert("Oops! There was a problem sending your message.");
+            }
+          })
+          .catch(error => {
+            alert("Error: " + error);
+          });
+        }
+        </script>
+
 </body>
 </html>
